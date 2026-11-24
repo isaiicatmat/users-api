@@ -3,12 +3,13 @@ import { PrismaClient } from '@prisma/client';
 import { PostgresUserRepository } from '../src/users/postgres-user.repository.ts';
 import { User } from '../src/users/user.entity.ts';
 import { ConflictError, NotFoundError } from '../src/core/errors.ts';
+import { randomPassword } from './fixtures.ts';
 
 // Runs against a real Postgres. Requires DATABASE_URL and applied migrations
 // (`npx prisma migrate deploy`). Skipped when DATABASE_URL is not set.
 const hasDb = Boolean(process.env.DATABASE_URL);
 
-const draft = (username: string, email: string) => new User(0, username, email, 'hashed', '', '');
+const draft = (username: string, email: string) => new User(0, username, email, randomPassword(), '', '');
 
 describe.skipIf(!hasDb)('PostgresUserRepository (integration)', () => {
     let prisma: PrismaClient;

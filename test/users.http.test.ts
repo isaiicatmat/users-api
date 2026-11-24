@@ -3,7 +3,9 @@ import type { FastifyInstance } from 'fastify';
 import { buildApp } from '../src/app.ts';
 import { InMemoryUserRepository } from './in-memory-user.repository.ts';
 
-const alice = { username: 'alice', email: 'alice@example.com', password: 'correct-horse' };
+import { randomPassword } from './fixtures.ts';
+
+const alice = { username: 'alice', email: 'alice@example.com', password: randomPassword() };
 
 describe('Users HTTP API', () => {
     let app: FastifyInstance;

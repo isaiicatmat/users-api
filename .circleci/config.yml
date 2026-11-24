@@ -5,11 +5,11 @@ jobs:
     docker:
       - image: cimg/node:22.12
         environment:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/users_test
+          DATABASE_URL: postgresql://postgres@localhost:5432/users_test
       - image: cimg/postgres:16.4
         environment:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_DB: users_test
     steps:
       - checkout

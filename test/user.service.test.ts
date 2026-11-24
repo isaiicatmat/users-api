@@ -4,7 +4,9 @@ import { PasswordService } from '../src/core/password.service.ts';
 import { NotFoundError, ValidationError, ConflictError } from '../src/core/errors.ts';
 import { InMemoryUserRepository } from './in-memory-user.repository.ts';
 
-const alice = { username: 'alice', email: 'alice@example.com', password: 'correct-horse' };
+import { randomPassword } from './fixtures.ts';
+
+const alice = { username: 'alice', email: 'alice@example.com', password: randomPassword() };
 
 describe('UserService', () => {
     let repo: InMemoryUserRepository;
@@ -27,7 +29,7 @@ describe('UserService', () => {
     });
 
     it('rejects passwords shorter than 8 characters', async () => {
-        await expect(service.create({ ...alice, password: 'short' })).rejects.toBeInstanceOf(ValidationError);
+        await expect(service.create({ ...alice, password: randomPassword().slice(0, 5) })).rejects.toBeInstanceOf(ValidationError);
     });
 
     it('propagates conflicts on duplicate email', async () => {
@@ -45,12 +47,13 @@ describe('UserService', () => {
         const { id } = await service.create(alice);
         const before = (await repo.findById(id))!.password;
 
-        const updated = await service.update(id, { email: 'new@example.com', password: 'another-secret' });
+        const newPassword = randomPassword();
+        const updated = await service.update(id, { email: 'new@example.com', password: newPassword });
 
         expect(updated.email).toBe('new@example.com');
         const after = (await repo.findById(id))!.password;
         expect(after).not.toBe(before);
-        expect(await PasswordService.compare('another-secret', after)).toBe(true);
+        expect(await PasswordService.compare(newPassword, after)).toBe(true);
     });
 
     it('validates email format on update', async () => {

@@ -73,7 +73,7 @@ npm test               # unit + HTTP tests, no database needed
 To run the integration suite against your own database:
 
 ```sh
-export DATABASE_URL=postgresql://postgres:postgres@localhost:5433/users_test
+export DATABASE_URL=postgresql://postgres@localhost:5433/users_test
 npx prisma migrate deploy
 npm run test:integration
 ```

@@ -3,7 +3,8 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      # Throwaway, local-only test database: trust auth, no password.
+      POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_DB: users_test
     ports:
       - "5433:5432"
