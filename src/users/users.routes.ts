@@ -1,10 +1,9 @@
 import type { FastifyInstance } from 'fastify';
-import { PostgresUserRepository } from './postgres-user.repository.ts';
+import type { IUserRepository } from './user.repository.ts';
 import { UserService } from './user.service.ts';
 import { UserController } from './user.controller.ts';
 
-export async function registerUserRoutes(fastify: FastifyInstance) {
-    const userRepository = new PostgresUserRepository();
+export async function registerUserRoutes(fastify: FastifyInstance, userRepository: IUserRepository) {
     const userService = new UserService(userRepository);
     const userController = new UserController(userService);
 

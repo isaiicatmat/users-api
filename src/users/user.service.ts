@@ -4,6 +4,7 @@ import type { IUserRepository } from './user.repository.ts';
 import { UserFactory } from './user.factory.ts';
 import { UserPresenter } from './user.presenter.ts';
 import type { UpdateUserDto } from './dto/update-user.dto.ts';
+import { NotFoundError } from '../core/errors.ts';
 
 export class UserService {
     constructor(
@@ -19,7 +20,7 @@ export class UserService {
 
     async findById(id: number): Promise<UserResponseDto> {
         const user = await this.userRepository.findById(id);
-        if (!user) throw new Error('Usuario no encontrado');
+        if (!user) throw new NotFoundError(`User ${id} not found`);
         return UserPresenter.toJSON(user);
     }
 
@@ -30,10 +31,10 @@ export class UserService {
 
     async update(id: number, updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
         const user = await this.userRepository.findById(id);
-        if (!user) throw new Error('Usuario no encontrado');
+        if (!user) throw new NotFoundError(`User ${id} not found`);
 
-        if (updateUserDto.username) user.username = updateUserDto.username;
-        if (updateUserDto.email) user.email = updateUserDto.email;
+        if (updateUserDto.username) user.changeUsername(updateUserDto.username);
+        if (updateUserDto.email) user.changeEmail(updateUserDto.email);
         if (updateUserDto.password) await user.updatePassword(updateUserDto.password);
 
         const updated = await this.userRepository.update(id, user);
@@ -42,7 +43,7 @@ export class UserService {
 
     async delete(id: number) {
         const user = await this.userRepository.findById(id);
-        if (!user) throw new Error('Usuario no encontrado');
+        if (!user) throw new NotFoundError(`User ${id} not found`);
         await this.userRepository.delete(id);
     }
 }

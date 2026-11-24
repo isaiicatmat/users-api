@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { ValidationError } from './errors.ts';
 
 export class PasswordService {
     private static readonly SALT_ROUNDS = 10;
@@ -15,12 +16,12 @@ export class PasswordService {
     }
 
     private static validatePassword(password: string): void {
-        if (!password || password.length < 8) {
-            throw new Error('Password debe tener mínimo 8 caracteres');
+        if (!password || password.length < this.MIN_LENGTH) {
+            throw new ValidationError(`Password must be at least ${this.MIN_LENGTH} characters`);
         }
 
-        if (password.length > 128) {
-            throw new Error('Password muy largo');
+        if (password.length > this.MAX_LENGTH) {
+            throw new ValidationError(`Password must be at most ${this.MAX_LENGTH} characters`);
         }
     }
 }
