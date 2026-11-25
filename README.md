@@ -1,5 +1,7 @@
 # Users API
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/isaiicatmat/users-api/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/isaiicatmat/users-api/tree/main)
+
 REST API to create, read, update and delete users, built with **Fastify 5**, **Prisma** and **PostgreSQL**, and structured with Clean Architecture so the HTTP layer, business rules and persistence can change independently.
 
 Passwords are hashed with bcrypt and never returned by the API. Domain errors are typed and mapped to HTTP status codes in a single place.
