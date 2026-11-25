@@ -1,4 +1,5 @@
 import { PasswordService } from '../core/password.service.ts';
+import { ValidationError } from '../core/errors.ts';
 
 export class User {
     constructor(
@@ -16,7 +17,7 @@ export class User {
 
     changeEmail(newEmail: string, updatedAt?: Date): void {
         if (!this.validateEmailFormat(newEmail)) {
-            throw new Error('Email inválido')
+            throw new ValidationError('Invalid email format');
         }
         this.email = newEmail;
         this.updatedAt = (updatedAt || new Date()).toISOString();

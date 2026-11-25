@@ -1,40 +1,17 @@
-version: '3.8'
-
 services:
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - postgres
-    ports:
-      - 3000:3000
-    environment:
-      - DATABASE_HOST=postgres
-      - DATABASE_URL=${DATABASE_URL}
-      - DATABASE_PORT=5432
-      - DATABASE_USER=${DB_USER}
-      - DATABASE_PASSWORD=${DB_PASSWORD}
-      - DATABASE_NAME=${DB_NAME}
-      - DATABASE_SYNC=true
-    restart: unless-stopped
-  
-  postgres:
+  postgres-test:
     image: postgres:16-alpine
-    container_name: tkc-postgres
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: postgres
+      # Throwaway, local-only test database: trust auth, no password.
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: users_test
     ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - "5433:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-volumes:
-  postgres_data:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
