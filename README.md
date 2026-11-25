@@ -1,6 +1,7 @@
 # Users API
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/isaiicatmat/users-api/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/isaiicatmat/users-api/tree/main)
+[![Coverage Status](https://coveralls.io/repos/github/isaiicatmat/users-api/badge.svg?branch=main)](https://coveralls.io/github/isaiicatmat/users-api?branch=main)
 
 REST API to create, read, update and delete users, built with **Fastify 5**, **Prisma** and **PostgreSQL**, and structured with Clean Architecture so the HTTP layer, business rules and persistence can change independently.
 
@@ -69,6 +70,7 @@ The container generates the Prisma client, applies migrations and starts the API
 
 ```sh
 npm test               # unit + HTTP tests, no database needed
+npm run test:coverage  # every suite with a coverage report (needs DATABASE_URL for the integration suite)
 ./up_test.sh           # starts a throwaway Postgres on :5433, applies migrations, runs all suites
 ```
 
@@ -80,7 +82,7 @@ npx prisma migrate deploy
 npm run test:integration
 ```
 
-CircleCI runs type checking, migrations and every test suite against a Postgres 16 service on each push.
+CircleCI runs type checking, migrations and every test suite against a Postgres 16 service on each push, then uploads coverage to Coveralls.
 
 ## Tech
 
